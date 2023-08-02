@@ -1,0 +1,35 @@
+html{
+        background-color: black;
+}
+
+.container{
+        display: grid;
+        grid-template-columns: 250px 250px;
+        border: brown 4px solid;
+        width: 500px;
+        height: 500px;
+        margin: 15px auto 0px auto; /* centraliza */
+        padding: 10px 10px 10px 10px;
+}
+
+.item01{
+    color: white;
+    font-size: 17px;
+    text-align: center;
+    border: 2px solid rgb(0, 140, 255);
+    background-image: url("../IMAGENS/Atenas_Grecia\ \(8\).jpg");
+    background-repeat: no-repeat;
+    background-size: 250px;
+    background-position: center;
+}
+
+.item02{
+    color: white;
+    font-size: 17px;
+    text-align: center;
+    border: 2px solid rgb(9, 255, 0);
+    background-image: url("../IMAGENS/download.jpg");
+    background-repeat: no-repeat;
+    background-size: 150px;
+    background-position: center;
+}
