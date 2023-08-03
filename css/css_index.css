@@ -40,4 +40,5 @@ html{
     flex-shrink: 0;
     border: 1px solid rgba(0, 0, 0, 0.12); 
     background: #95BCCC;
+    margin-left: 700px; 
 }
