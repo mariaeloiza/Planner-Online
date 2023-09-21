@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Cadastro</title>
+    <title>Login</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -22,76 +22,46 @@
 </head>
 <body>
 
-<center>
-      <?php
-  
-        $conn = mysqli_connect("localhost", "root", "", "planneronline");
-          
-        if($conn === false){
-            die("ERROR: Could not connect. " 
-                . mysqli_connect_error());
-        }
-          
-        $email = $_POST["email"];
-        $nome = $_POST["nome"];
-        $senha = $_POST["senha"];
-
-        $senha = password_hash($senha, PASSWORD_BCRYPT);
+      <section class="vh-100">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100" >
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+              <div class="card shadow-2-strong" style="border-radius: 1rem;" id="caixa">
+                <div class="card-body p-5 text-center">
       
-        $sql = "INSERT INTO usuario VALUES ('$email', 
-            '$nome','$senha')";
-          
-        if(mysqli_query($conn, $sql)){
-            // echo ""; 
-            // echo nl2br("\n$email\n $nome\n$senha");
-        } else{
-            // echo "ERROR: Hush! Sorry $sql. " 
-            //     . mysqli_error($conn);
-        }
-          
-        mysqli_close($conn);
-      ?>
-</center>
-
-<section class="vh-100">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100" >
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card shadow-2-strong" style="border-radius: 1rem;" id="caixa">
-          <div class="card-body p-5 text-center">
+                  <h3 class="mb-5">Login</h3>
       
-            <h3 class="mb-5">Cadastro</h3>
-
-
-            <form action="" method="POST">
-              <div class="form-outline mb-4">
-                <input type="text"  class="form-control form-control-lg" name="email"/>
-                <label class="form-label">E-mail</label>
-              </div>
-
-              <div class="form-outline mb-4">
-                <input type="text" class="form-control form-control-lg" name="nome"/>
-                <label class="form-label">Nome de Usuário</label>
-              </div>
+                  <div class="form-outline mb-4">
+                    <input type="text" id="typeEmailX-2" class="form-control form-control-lg" />
+                    <label class="form-label" for="typeEmailX-2">Usuário</label>
+                  </div>
       
-              <div class="form-outline mb-4">
-                <input type="password" class="form-control form-control-lg" name="senha" maxlength="8"/>
-                <label class="form-label">Senha</label>
-              </div>
+                  <div class="form-outline mb-4">
+                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
+                    <label class="form-label" for="typePasswordX-2">Senha</label>
+                  </div>
     
-            <button class="btn btn-outline-info" type="submit" value="Submit">Cadastrar</button> 
+                  <a href="./home.html">
+                    <button class="btn btn-outline-info" type="submit">Login</button>
+                  </a>
 
-
-            </form>
-                  
-            <hr class="my-4">
+                  <p class="small fw-bold mt-2 pt-1 mb-0">Não tem login? 
+                    <a href="./paginacadastro.php" class="link-danger">Cadastre-se aqui!</a>
+                  </p>
       
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <a href="#!" class="text-body" style="text-align: center;">Esqueceu a senha?</a>
+                  </div>
+      
+      
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
 <div>
     <footer class="layout-footer fixed-bottom" style="text-align: center ;" >

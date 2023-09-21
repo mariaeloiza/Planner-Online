@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . "/../configs/BancoDados.php";
 
-class Usuario
+class usuario
 {
 
-    public static function getUsuario()
+    public static function getusuario()
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("SELECT * FROM Usuario");
+            $stmt = $conexao->prepare("SELECT * FROM usuario");
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -22,7 +22,7 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("INSERT INTO Usuario(email, nome, senha) VALUES (?,?,?)");
+            $stmt = $conexao->prepare("INSERT INTO usuario(email, nome, senha) VALUES (?,?,?)");
 
             $senha = password_hash($senha, PASSWORD_BCRYPT);
             $stmt->execute([$email, $nome, $senha]);
@@ -42,7 +42,7 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("SELECT COUNT(*) FROM Usuario WHERE nome = ?");
+            $stmt = $conexao->prepare("SELECT COUNT(*) FROM usuario WHERE nome = ?");
             $stmt->execute([$nome]);
 
             if ($stmt->fetchColumn() > 0) {
@@ -60,7 +60,7 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("SELECT COUNT(*) FROM Usuario WHERE email = ?");
+            $stmt = $conexao->prepare("SELECT COUNT(*) FROM usuario WHERE email = ?");
             $stmt->execute([$email]);
 
             if ($stmt->fetchColumn() > 0) {
@@ -78,7 +78,7 @@ class Usuario
     {
         try {
             $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare("SELECT * FROM Usuario WHERE email = ?");
+            $stmt = $conexao->prepare("SELECT * FROM usuario WHERE email = ?");
             $stmt->execute([$nome]);
             $resultado = $stmt->fetchAll();
 
