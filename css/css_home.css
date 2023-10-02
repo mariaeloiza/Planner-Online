@@ -1,107 +1,147 @@
-html{
-    /* border-radius: 32px;
-    border: 1px solid rgba(0, 0, 0, 0.12); */
+/*
+ * Base structure
+ */
+ html, body {
+	height: 100%;
+    /* background: #A7C6CD; */
+}
+
+body {
+	padding-top: 56px;
+	padding-left: 0;
+} 
+
+/*
+ * main layout
+ */
+.layout-main {
+    display: flex;
+    min-height: calc(100vh - 52px);
+    overflow: hidden;
+}
+
+/*
+ * Content
+ */
+.layout-content {
+    width: 100%;
+    padding-top: 0px;
     background: #A7C6CD;
+    background: url("../imagens/fundo.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    filter: contrast(50px);
+    opacity: 0.5;
 }
 
-.home{
-    width: 206px;
-    height: 42px;
-    left: 130px; 
-    top: 422px; 
-    position: absolute; 
-    text-align: center; 
-    color: black; 
-    font-size: 40px; 
-    font-family: Arapey; 
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word"
+
+.container {
+	width: 100%;
+	padding-top: 20px;
 }
 
-.lista{
-    width: 206px; 
-    height: 42px;
-    left: 130px; 
-    top: 597px; 
-    position: absolute; 
-    text-align: center; 
-    color: black; 
-    font-size: 40px;
-    font-family: Arapey; 
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word"
+/*
+ * Sidebar
+ */
+.sidebar {
+    width: 0px;
+    height: 100vh;
+    border-top: 1px solid #A7C6CD;
+    border-right: 1px solid #A7C6CD;    
+    background-color: white;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: width .5s;
 }
 
-.journal{
-    width: 206px; 
-    height: 42px; 
-    left: 130px; 
-    top: 688px; 
-    position: absolute; 
-    text-align: center; 
-    color: black; 
-    font-size: 40px; 
-    font-family: Arapey;
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word
+.sidebar .nav {
+	margin-bottom: 0px;
 }
 
-.planilha{
-    width: 206px; 
-    height: 42px; 
-    left: 130px; 
-    top: 786px; 
-    position: absolute; 
-    text-align: center; 
+.sidebar .nav-item {
+	width: 100%;
+}
+
+.sidebar .nav-item {
+	margin-left: 0;
+}
+
+.sidebar .nav-link {
+	border-radius: 0;
+} 
+
+.sidebar ul li:hover a, .menu ul li.active a{
+    color: #777777;
+}
+
+.sidebar ul{
+    list-style: none;
+    padding: 10px 0px;
+}
+
+.sidebar ul li a{
+    display: block;
+    color:#1a1a1a;
+    padding: 10px 15px;
+    white-space: nowrap;
+}
+
+.sidebar.sidebar-open {
+    width: 200px;
+}
+
+/*
+ * nav-pills home
+ */
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+	background: white;
     color: black;
-    font-size: 40px; 
-    font-family: Arapey; 
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word"
 }
 
-.calendario{
-    width: 206px; 
-    height: 42px; 
-    left: 130px; 
-    top: 515px; 
-    position: absolute; 
-    text-align: center; 
-    color: black; 
-    font-size: 40px; 
-    font-family: Arapey; 
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word
+/*
+ * toogle do navbar do menu
+ */ 
+
+.navbar-toggle {
+    display: inline-block;
+    margin-left: 10px;
 }
 
-.textocentral{
-    width: 1116px; 
-    height: 149px; 
-    left: 950px; 
-    top: 315px; 
-    position: absolute; 
-    text-align: center; 
-    color: black; 
-    font-size: 150px; 
-    font-family: Arapey; 
-    font-weight: 400; 
-    line-height: 24px; 
-    word-wrap: break-word"
+/*
+ * Footer
+ */
+.layout-footer {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	height: 50px;
+	border-top: 1px ;
 }
 
-.identificacao{
-    width: 130px; 
-    height: 127px; 
-    left: 3600px; 
-    top: 50px; 
-    position: absolute; 
-    background: white; 
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
-    border-radius: 9999px; 
-    border: 0.50px black solid"
+.footer-copy {
+	font-size: 92%;
+	display: block;
+	color: #777777;
+	text-align: center;
+}
+
+
+#txtLista{
+    font-family: Arapey; 
+}
+
+#txtJournal{
+    font-family: Arapey; 
+}
+
+#textoprincipal{
+    width: auto;
+    height: auto;
+    text-align: center;
+    font-size: 50px;
+    color: black;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 900; 
 }
