@@ -25,7 +25,7 @@
 <center>
       <?php
   
-        $conn = mysqli_connect("localhost", "root", "", "planneronline");
+        $conn = mysqli_connect("localhost", "root", "root", "planneronline");
           
         if($conn === false){
             die("ERROR: Could not connect. " 
@@ -60,7 +60,8 @@
         //     '$nome','$senha')";
           
             if(mysqli_query($conn, $sql)){
-              header('Location: http://localhost/Planner-Online-master/Planner-Online-master/paginalogin.php');
+              // header('Location: http://localhost/Planner-Online-master/Planner-Online-master/paginalogin.php');
+              header('Location: paginalogin.php');
               die();
             } else{
               // echo "ERROR: Hush! Sorry $sql. " 

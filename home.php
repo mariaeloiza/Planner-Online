@@ -3,12 +3,10 @@ session_start();
 
 if (!isset($_SESSION['usuario_email'])) {
     header("Location: paginalogin.php");
-    exit();
-}
+    exit(); 
+  }
 
-// Conteúdo da página de painel aqui
 ?>
-
 <!DOCTYPE html>
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -86,7 +84,7 @@ if (!isset($_SESSION['usuario_email'])) {
 
     <section class="layout-content">
           
-         <!-- <p id="textoprincipal">Sem organização, não há otimização.</p> -->
+      <p id="textoprincipal">Sem organização, não há otimização.</p>
     
     </section>
 
