@@ -3,7 +3,7 @@
  */
  html, body {
 	height: 100%;
-    /* background: #A7C6CD; */
+    background: #A7C6CD;
 }
 
 body {
@@ -27,13 +27,7 @@ body {
     width: 100%;
     padding-top: 0px;
     background: #A7C6CD;
-    background: url("../imagens/artigos-de-papelaria-azul-na-configuracao-plana_23-2148475339.jpg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    filter: contrast(50px);
-    opacity: 0.5;
 }
-
 
 .container {
 	width: 100%;
@@ -127,21 +121,29 @@ body {
 	text-align: center;
 }
 
+/* #nav{
+    background: #A7C6CD;
+} */
 
-#txtLista{
+/* #textoprincipal {
+    width: 1000px; 
+    height: 1000px; 
+    left: 500px; 
+    top: 300px; 
+    position: absolute; 
+    text-align: center; 
+    color: black; 
+    font-size: 90px; 
     font-family: Arapey; 
-}
+    font-weight: 100; 
+    line-height: 100px; 
+    word-wrap: break-word;
+} */
 
-#txtJournal{
-    font-family: Arapey; 
-}
-
-#textoprincipal{
-    width: auto;
-    height: auto;
-    text-align: center;
-    font-size: 50px;
-    color: black;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: 900; 
+#conteudo{
+    background-color: white;
+    color: #333;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px; 
 }

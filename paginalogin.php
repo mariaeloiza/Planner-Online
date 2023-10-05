@@ -23,44 +23,43 @@
 <body>
 
 <center>
-      <?php
-  
-        require_once("./configs/utils.php");  
-        require_once("./model/Usuario.php");
+<?php
+session_start();
 
-        $conn = mysqli_connect("localhost", "root", "", "planneronline");
-          
-        if($conn === false){
-            die("ERROR: Could not connect. " 
-                . mysqli_connect_error());
-        }
-        
-        if (isset($_POST["email"]) and !empty($_POST["email"])) {
-         if (isset($_POST["senha"]) and !empty($_POST["senha"])) {
-             $email = $_POST["email"];
-             $senha = $_POST["senha"];
-        
-             if (Usuario::existeUsuario($email)) {
-                echo "<p>O usuário com $email existe!</p>";
-                $sql = "SELECT COUNT(*) FROM usuario WHERE email = ?";
-                header('Location: http://localhost/PlannerOnline/home.html');
-                die();
-          
-            if(mysqli_query($conn, $sql)){
-            //   // echo ""; 
-            //   // echo nl2br("\n$email\n $nome\n$senha");
-            } else{
-            //   // echo "ERROR: Hush! Sorry $sql. " 
-            //   //    . mysqli_error($conn);
-            }
-          
-            mysqli_close($conn);
-         }
-        }
-      }
-    
-      
-      ?>
+// Conectar ao banco de dados
+$conn = new mysqli("localhost", "root", "", "planneronline");
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco de dados: " . $conn->connect_error);
+}
+
+if (isset($_POST["email"]) and !empty($_POST["email"])) {
+  if (isset($_POST["senha"]) and !empty($_POST["senha"])) {
+// Obter dados do formulário
+$email = $_POST['email'];
+$senha = $_POST['senha'];
+
+// Consultar o banco de dados
+$sql = "SELECT email, senha FROM usuario WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user && password_verify($senha, $user['senha'])) {
+    // Login bem-sucedido
+    $_SESSION['usuario_email'] = $user['email'];
+    header("Location: home.php");
+} else {
+    // Login falhou
+    header("Location: paginalogin.php");
+}
+$stmt->close();
+$conn->close();}}
+
+?>
+
 </center>
 
 
@@ -73,23 +72,25 @@
       
                   <h3 class="mb-5">Login</h3>
       
+                  <form action="" method="POST">
                   <div class="form-outline mb-4">
-                    <input type="text" id="typeEmailX-2" class="form-control form-control-lg" />
-                    <label class="form-label" for="typeEmailX-2">Usuário</label>
+                    <input type="text" class="form-control form-control-lg" name="email" />
+                    <label class="form-label">Usuário</label>
                   </div>
       
                   <div class="form-outline mb-4">
-                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
-                    <label class="form-label" for="typePasswordX-2">Senha</label>
+                    <input type="password" class="form-control form-control-lg" name="senha"/>
+                    <label class="form-label" >Senha</label>
                   </div>
     
-                  <a href="./home.html">
-                    <button class="btn btn-outline-info" type="submit">Login</button>
-                  </a>
+                  <!-- <a href="./home.html"> -->
+                    <button class="btn btn-outline-info" type="submit" value="Subimit">Login</button>
+                  <!-- </a> -->
 
                   <p class="small fw-bold mt-2 pt-1 mb-0">Não tem login? 
                     <a href="./paginacadastro.php" class="link-danger">Cadastre-se aqui!</a>
                   </p>
+                  </form>
       
                   <hr class="my-4">
 

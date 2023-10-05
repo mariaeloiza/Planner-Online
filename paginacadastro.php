@@ -60,7 +60,7 @@
         //     '$nome','$senha')";
           
             if(mysqli_query($conn, $sql)){
-              header('Location: http://localhost/PlannerOnline/paginalogin.php');
+              header('Location: http://localhost/Planner-Online-master/Planner-Online-master/paginalogin.php');
               die();
             } else{
               // echo "ERROR: Hush! Sorry $sql. " 
