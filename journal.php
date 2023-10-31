@@ -23,14 +23,24 @@
 <body>
 
 <?php
+function verificadorLogin ($email, $senha) {
+  //   if (!parametrosValidos($_SESSION, ["email"])) {
+  //     header("Location: paginalogin.php");
+  //   }
+  $email = $_POST["email"];
+    $senha = $_POST["senha"];
+  return ($email == "" && $senha == "");
+  }
+
+session_start();
 // Verifique se o formulário foi submetido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recupere o email e a senha do formulário
-    $email = $_POST["email"];
-    $senha = $_POST["senha"];
+    // $email = $_POST["email"];
+    // $senha = $_POST["senha"];
 
     // Verifique a autenticação (isso pode variar dependendo do seu sistema)
-    if (autenticarUsuario($email, $senha)) {
+    if (verificadorLogin($email, $senha)) {
         // Se o usuário estiver autenticado com sucesso, você pode pegar o email
         $emailAutenticado = $email;
 
@@ -39,22 +49,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $descricao = $_POST["descricao"];
         $conteudo = "Email: $emailAutenticado<br>Data: $data<br>Texto: $descricao";
 
-        $sql = "INSERT INTO diario VALUES ('$data', '$descricao') WHERE email = ?";
+        $sql = "INSERT INTO diario (data, descricao, email) VALUES (?, ?, ?)";
+        // $stmt = $mysqli->prepare($sql);
+        // $stmt->bind_param("sss", $data, $descricao, $emailAutenticado);
 
         // Exiba o conteúdo em um div
-        // echo "<div id='conteudo'>$conteudo</div>";
+        echo "<div id='conteudo'>$conteudo</div>";
     } else {
-        echo "Autenticação falhou. Por favor, tente novamente.";
+        // echo "Autenticação falhou. Por favor, tente novamente.";
     }
 }
 
 // Função para autenticar o usuário (substitua isso com sua lógica de autenticação real)
-function autenticarUsuario($email, $senha) {
+// function autenticarUsuario($email, $senha) {
     // Verifique o email e a senha no seu banco de dados ou sistema de autenticação
     // Se o usuário estiver autenticado, retorne true, caso contrário, retorne false
     // Esta é uma implementação de exemplo e deve ser substituída por uma lógica de autenticação segura.
-    return ($email == "" && $senha == "");
-}
+    // return ($email == "" && $senha == "");
+// }
+
+// function verificadorLogin ($email, $senha) {
+// //   if (!parametrosValidos($_SESSION, ["email"])) {
+// //     header("Location: paginalogin.php");
+// //   }
+// return ($email == "" && $senha == "");
+// }
+
 ?>
 
     <header>
@@ -125,9 +145,9 @@ function autenticarUsuario($email, $senha) {
 
     <br>
 
-    <?php
-    echo "<div id='conteudo'>$conteudo</div>"; 
-    ?>
+    <!-- <php -->
+    <!-- echo "<div>$descricao</div>";  -->
+    <!-- ?>  -->
 </div>
         </div>
     

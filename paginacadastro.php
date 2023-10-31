@@ -25,7 +25,7 @@
 <center>
       <?php
   
-        $conn = mysqli_connect("localhost", "root", "root", "planneronline");
+        $conn = mysqli_connect("localhost", "root", "", "planneronline");
           
         if($conn === false){
             die("ERROR: Could not connect. " 
