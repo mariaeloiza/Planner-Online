@@ -23,57 +23,109 @@
 <body>
 
 <?php
-function verificadorLogin ($email, $senha) {
-  //   if (!parametrosValidos($_SESSION, ["email"])) {
-  //     header("Location: paginalogin.php");
-  //   }
-  $email = $_POST["email"];
-    $senha = $_POST["senha"];
-  return ($email == "" && $senha == "");
-  }
 
 session_start();
-// Verifique se o formulário foi submetido
+
+function conectarBanco() {
+  $servidor = "localhost";
+  $usuario = "root";
+  $senha = "";
+  $banco = "planneronline";
+
+  $conexao = new mysqli($servidor, $usuario, $senha, $banco);
+
+  if ($conexao->connect_error) {
+      die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
+  }
+
+  return $conexao;
+}
+
+function consultarUsuarioPorEmail($email) {
+  $servidor = "localhost";
+  $usuario = "root";
+  $senha = "";
+  $banco = "planneronline";
+
+  $conexao = new mysqli("localhost", "root", "", "planneronline");
+  
+  if ($conexao->connect_error) {
+      die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
+  }
+
+  $resultado = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+
+  if ($resultado->num_rows > 0) {
+      return $resultado->fetch_assoc();
+  } else {
+      return null;
+  }
+
+  $conexao->close();
+}
+
+function autenticarUsuario($email, $senha) {
+  
+  $usuario = consultarUsuarioPorEmail($email);
+
+  if ($usuario) {
+      if ($senha === $usuario['senha']) {
+          session_start();
+          $_SESSION['usuario_email'] = $email;
+
+          return true;
+      }
+  }
+
+  return false;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recupere o email e a senha do formulário
     // $email = $_POST["email"];
     // $senha = $_POST["senha"];
 
+
     // Verifique a autenticação (isso pode variar dependendo do seu sistema)
-    if (verificadorLogin($email, $senha)) {
-        // Se o usuário estiver autenticado com sucesso, você pode pegar o email
-        $emailAutenticado = $email;
+    // Se o usuário estiver autenticado com sucesso, você pode pegar o email
+    $emailAutenticado = $_SESSION['usuario_email'];
 
-        // Agora, você pode juntar o email com outros dados e colocá-los em um novo div
-        $data = $_POST["data"];
-        $descricao = $_POST["descricao"];
-        $conteudo = "Email: $emailAutenticado<br>Data: $data<br>Texto: $descricao";
+    // $emailAutenticado = $_POST["email"];
 
-        $sql = "INSERT INTO diario (data, descricao, email) VALUES (?, ?, ?)";
-        // $stmt = $mysqli->prepare($sql);
-        // $stmt->bind_param("sss", $data, $descricao, $emailAutenticado);
+    // Agora, você pode juntar o email com outros dados e colocá-los em um novo div
+    $data = $_POST["data"];
+    $descricao = $_POST["descricao"];
+    $conteudo = "Email: $emailAutenticado<br>Data: $data<br>Texto: $descricao";
 
-        // Exiba o conteúdo em um div
-        echo "<div id='conteudo'>$conteudo</div>";
-    } else {
-        // echo "Autenticação falhou. Por favor, tente novamente.";
-    }
+    $conexao = conectarBanco();
+
+    $sql = "INSERT INTO diario (data, descricao, email) VALUES (?, ?, ?)";
+    $stmt = $conexao->prepare($sql);
+
+    if ($stmt) {
+      $stmt->bind_param("sss", $data, $descricao, $emailAutenticado);
+
+      $stmt->execute();
+
+      $stmt->close();
+
+  } else {
+      // Trate o erro na preparação da consulta, se necessário
+  }
+
+    $conexao->close();
+    // $stmt = $mysqli->prepare($sql);
+    // $stmt->bind_param("sss", $data, $descricao, $emailAutenticado);
+
+    // Exiba o conteúdo em um div
+//     echo "<div id='conteudo' style='background-color: white;
+//                                     color: #333;
+//                                     padding: 10px;
+//                                     border: 2px solid #ccc;
+//                                     border-radius: 10px'>$data, $descricao</div>";
+ } else {
+    // echo "Autenticação falhou. Por favor, tente novamente.";
 }
-
-// Função para autenticar o usuário (substitua isso com sua lógica de autenticação real)
-// function autenticarUsuario($email, $senha) {
-    // Verifique o email e a senha no seu banco de dados ou sistema de autenticação
-    // Se o usuário estiver autenticado, retorne true, caso contrário, retorne false
-    // Esta é uma implementação de exemplo e deve ser substituída por uma lógica de autenticação segura.
-    // return ($email == "" && $senha == "");
-// }
-
-// function verificadorLogin ($email, $senha) {
-// //   if (!parametrosValidos($_SESSION, ["email"])) {
-// //     header("Location: paginalogin.php");
-// //   }
-// return ($email == "" && $senha == "");
-// }
 
 ?>
 
@@ -145,9 +197,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <br>
 
-    <!-- <php -->
-    <!-- echo "<div>$descricao</div>";  -->
-    <!-- ?>  -->
+     <?php 
+      //  Exiba o conteúdo em um div 
+        echo "<div id='conteudo' style='background-color: white;
+                                        color: #333;
+                                        padding: 10px;
+                                        border: 2px solid #ccc;
+                                        border-radius: 10px'>Data: $data <br> $descricao</div>";
+    ?>  
+
 </div>
         </div>
     
@@ -162,9 +220,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </footer>
 </div>
 
-
-
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -173,9 +228,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
-
 
 <script type="text/javascript">
 
