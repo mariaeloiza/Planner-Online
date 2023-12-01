@@ -8,16 +8,12 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
  
-
-    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!--<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- Custom styles for this template -->
     <link href="css/css_login.css" rel="stylesheet" />
 </head>
 <body>
@@ -26,7 +22,6 @@
 <?php
 session_start();
 
-// Conectar ao banco de dados
 $conn = new mysqli("localhost", "root", "", "planneronline");
 
 if ($conn->connect_error) {
@@ -35,11 +30,11 @@ if ($conn->connect_error) {
 
 if (isset($_POST["email"]) and !empty($_POST["email"])) {
   if (isset($_POST["senha"]) and !empty($_POST["senha"])) {
-// Obter dados do formulário
+
 $email = $_POST['email'];
 $senha = $_POST['senha'];
 
-// Consultar o banco de dados
+
 $sql = "SELECT email, senha FROM usuario WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -48,11 +43,11 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 if ($user && password_verify($senha, $user['senha'])) {
-    // Login bem-sucedido
+  
     $_SESSION['usuario_email'] = $user['email'];
     header("Location: home.php");
 } else {
-    // Login falhou
+  
     header("Location: paginalogin.php");
 }
 $stmt->close();
@@ -83,9 +78,7 @@ $conn->close();}}
                     <label class="form-label" >Senha</label>
                   </div>
     
-                  <!-- <a href="./home.html"> -->
                     <button class="btn btn-outline-info" type="submit" value="Subimit">Login</button>
-                  <!-- </a> -->
 
                   <p class="small fw-bold mt-2 pt-1 mb-0">Não tem login? 
                     <a href="./paginacadastro.php" class="link-danger">Cadastre-se aqui!</a>

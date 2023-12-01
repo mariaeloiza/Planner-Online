@@ -8,78 +8,110 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <!-- Calendario -->
-    <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
-    <script src='fullcalendar/lib/jquery.min.js'></script>
-    <script src='fullcalendar/lib/moment.min.js'></script>
-    <script src='fullcalendar/fullcalendar.js'></script>
-    
-    <!-- script de tradução -->
-    <script src='fullcalendar/lang/pt-br.js'></script>
-        
-    <script>
-       $(document).ready(function() {	
-           	
-            //CARREGA CALENDÁRIO E EVENTOS DO BANCO
-            $('#calendario').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                defaultDate: '2016-01-12',
-                editable: true,
-                eventLimit: true, 
-                events: 'eventos.php',           
-                eventColor: '#dd6777'
-            });	
-            
-            //CADASTRA NOVO EVENTO
-            $('#novo_evento').submit(function(){
-                //serialize() junta todos os dados do form e deixa pronto pra ser enviado pelo ajax
-                var dados = jQuery(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "cadastrar_evento.php",
-                    data: dados,
-                    success: function(data)
-                    {   
-                        if(data == "1"){
-                            alert("Cadastrado com sucesso! ");
-                            //atualiza a página!
-                            location.reload();
-                        }else{
-                            alert("Houve algum problema.. ");
-                        }
-                    }
-                });                
-                return false;
-            });	
-	   }); 
-                
-    </script>
-    
-    <style>
-        #calendario{
-            position: relative;
-            width: 70%;
-            margin: 0px auto;
-        }        
-    </style>
- 
-
-    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!--<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- Custom styles for this template -->
     <link href="css/css_indexnew.css" rel="stylesheet" />
 </head>
+<?php
 
+session_start();
+
+function conectarBanco() {
+  $servidor = "localhost";
+  $usuario = "root";
+  $senha = "";
+  $banco = "planneronline";
+
+  
+  $conexao = new mysqli("localhost", "root", "", "planneronline");
+
+  if ($conexao->connect_error) {
+      die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
+  }
+
+  return $conexao;
+}
+
+function consultarUsuarioPorEmail($email) {
+  $servidor = "localhost";
+  $usuario = "root";
+  $senha = "";
+  $banco = "planneronline";
+
+  $conexao = new mysqli("localhost", "root", "", "planneronline");
+  
+  if ($conexao->connect_error) {
+      die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
+  }
+
+  $resultado = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+
+  if ($resultado->num_rows > 0) {
+      return $resultado->fetch_assoc();
+  } else {
+      return null;
+  }
+
+  $conexao->close();
+}
+
+function autenticarUsuario($email, $senha) {
+  
+  $usuario = consultarUsuarioPorEmail($email);
+
+  if ($usuario) {
+      if ($senha === $usuario['senha']) {
+          session_start();
+          $_SESSION['usuario_email'] = $email;
+
+          return true;
+      }
+  }
+
+  return false;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    $emailAutenticado = $_SESSION['usuario_email'];
+
+    
+    $data = $_POST["data"];
+    $nome = $_POST["nome"];
+    $descricao = $_POST["descricao"];
+    $conteudo = "Data: $data<br> Nome do Evento: $nome <br> Mais informações: $descricao";
+
+    $conexao = conectarBanco();
+
+    $sql = "INSERT INTO evento (data, nome, descricao, email) VALUES (?, ?, ?, ?)";
+    $stmt = $conexao->prepare($sql);
+
+    if ($stmt) {
+      $stmt->bind_param("ssss", $data, $nome, $descricao, $emailAutenticado);
+
+      $stmt->execute();
+
+      $stmt->close();
+
+  } else {
+      
+  }
+    $conexao->close();
+
+    // echo "<div id='conteudo' style='background-color: white;
+    //                                 color: #333;
+    //                                 padding: 10px;
+    //                                 border: 2px solid #ccc;
+    //                                 border-radius: 10px'>$data, $descricao</div>";
+ } else {
+    
+}
+
+?>
 <body>
 
     <header>
@@ -139,14 +171,68 @@
         <div class="container">
 
             <div id='calendario'>
+
+            <?php
+// Definir o mês e o ano
+$mes = isset($_GET['mes']) ? $_GET['mes'] : date('m');
+$ano = isset($_GET['ano']) ? $_GET['ano'] : date('Y');
+
+// Primeiro dia do mês
+$primeiro_dia = mktime(0, 0, 0, $mes, 1, $ano);
+
+// Número de dias no mês
+$numero_dias = date('t', $primeiro_dia);
+
+// Obter o dia da semana do primeiro dia do mês
+$dia_semana = date('w', $primeiro_dia);
+
+// Contar quantos espaços em branco devemos adicionar antes do primeiro dia do mês
+$espacos_em_branco = $dia_semana;
+
+// Adicionar uma semana para as últimas semanas de cada mês
+$numero_dias += $dia_semana;
+
+// Exibir o calendário
+echo '<table border="2" align="center">';
+echo '<tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sab</th></tr>';
+echo '<tr>';
+
+for($i = 0; $i < $numero_dias; $i++) {
+    // Adicionar espaços em branco antes do primeiro dia do mês
+    if($i < $espacos_em_branco) {
+        echo '<td></td>';
+    } else {
+        $dia = $i - $espacos_em_branco + 1;
+        echo "<td>$dia</td>";
+    }
+
+    // Quando alcançar o fim da semana, iniciar uma nova linha
+    if(($i + 1) % 7 == 0) {
+        echo '</tr><tr>';
+    }
+}
+
+// Fechar a tabela
+echo '</tr>';
+echo '</table>';
+?>
+
                 <br/>         
                 
                     <form id="novo_evento" action="" method="post">
-                        Nome do Evento: <input type="text" name= "nome" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required><br>   
-                        Data do Evento: <input type="date" name="data" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required><br>        
+                        Nome do Evento: <input type="text" name= "nome" id="nome" class="form-control" required><br>  
+                        Descrição do Evento: <input type="text" name= "descricao" id="descricao" class="form-control" required><br>   
+                        Data do Evento: <input type="date" name="data"  id="data" class="form-control" required><br>        
                         <button type="submit" class="btn btn-outline-info">Cadastrar</button>
                     </form>
 
+                    <?php
+                    echo "<div id='conteudo' style='background-color: white;
+                                 color: #333;
+                                     padding: 10px;
+                                     border: 2px solid #ccc;
+                                   border-radius: 10px'>$conteudo</div>";
+                    ?>
             </div>
 
         </div>

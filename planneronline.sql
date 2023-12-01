@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/09/2023 às 16:53
+-- Tempo de geração: 01/12/2023 às 22:47
 -- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.0.28
+-- Versão do PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,18 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `calendario`
---
-
-CREATE TABLE `calendario` (
-  `ano` int(11) NOT NULL,
-  `mes` varchar(15) NOT NULL,
-  `email` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `diario`
 --
 
@@ -45,19 +33,38 @@ CREATE TABLE `diario` (
   `email` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `diario`
+--
+
+INSERT INTO `diario` (`data`, `descricao`, `email`) VALUES
+('2023-11-27', 'segundaa', 'isabellybenedito2210@gmail.com'),
+('2023-12-01', 'o natal está pertoo', 'giisaisa.16@gmail.com'),
+('2023-12-08', 'sou lindaaaaa', 'giisaisa.16@gmail.com'),
+('2023-12-13', 'yes, I can', 'isabellybenedito2210@gmail.com'),
+('2023-12-14', 'fvgbn', 'isabellybenedito2210@gmail.com'),
+('2023-12-25', 'natallllllllllllllll', 'isabellybenedito2210@gmail.com'),
+('2024-01-06', 'newwwww year', 'isabellybenedito2210@gmail.com');
+
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `eventos`
+-- Estrutura para tabela `evento`
 --
 
-CREATE TABLE `eventos` (
-  `ano` int(11) DEFAULT NULL,
-  `mes` varchar(15) DEFAULT NULL,
+CREATE TABLE `evento` (
   `data` date NOT NULL,
-  `nome` varchar(50) DEFAULT NULL,
-  `descricao` varchar(250) DEFAULT NULL
+  `nome` varchar(100) NOT NULL,
+  `descricao` varchar(500) NOT NULL,
+  `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `evento`
+--
+
+INSERT INTO `evento` (`data`, `nome`, `descricao`, `email`) VALUES
+('2023-12-25', 'Natal em Família ', 'Será na fazenda da vovó, levar a sobremesa e estar lá 11h50 da manhã', 'isabellybenedito2210@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -116,19 +123,21 @@ CREATE TABLE `planilha` (
 CREATE TABLE `usuario` (
   `email` varchar(100) NOT NULL,
   `nome` varchar(100) DEFAULT NULL,
-  `senha` varchar(8) DEFAULT NULL
+  `senha` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `usuario`
+--
+
+INSERT INTO `usuario` (`email`, `nome`, `senha`) VALUES
+('giisaisa.16@gmail.com', 'Gislaine Rabello', '$2y$10$AsoR6GHRTOwlySpxr1RWLeAZ0cSI9ziUMoZAKJ5ZQUkdFjd6ejKma'),
+('isabellybenedito2210@gmail.com', 'Isabelly Benedito', '$2y$10$E7YQlebIxE4a0HgmvRE7WOu0UUYrZo4uf1/IXQVu7RhSwBL1xV0yW'),
+('lucia@gmail.com', 'Lucia Rabello', '$2y$10$DHQcITtUKji.wQbh3mJX9uGvwC9R6j943WQX5UehmHUZU7pd5q3aW');
 
 --
 -- Índices para tabelas despejadas
 --
-
---
--- Índices de tabela `calendario`
---
-ALTER TABLE `calendario`
-  ADD PRIMARY KEY (`ano`,`mes`),
-  ADD KEY `email` (`email`);
 
 --
 -- Índices de tabela `diario`
@@ -138,11 +147,11 @@ ALTER TABLE `diario`
   ADD KEY `email` (`email`);
 
 --
--- Índices de tabela `eventos`
+-- Índices de tabela `evento`
 --
-ALTER TABLE `eventos`
-  ADD PRIMARY KEY (`data`),
-  ADD KEY `ano` (`ano`,`mes`);
+ALTER TABLE `evento`
+  ADD PRIMARY KEY (`nome`),
+  ADD KEY `email` (`email`);
 
 --
 -- Índices de tabela `item_lista`
@@ -183,22 +192,16 @@ ALTER TABLE `usuario`
 --
 
 --
--- Restrições para tabelas `calendario`
---
-ALTER TABLE `calendario`
-  ADD CONSTRAINT `calendario_ibfk_1` FOREIGN KEY (`email`) REFERENCES `usuario` (`email`);
-
---
 -- Restrições para tabelas `diario`
 --
 ALTER TABLE `diario`
   ADD CONSTRAINT `diario_ibfk_1` FOREIGN KEY (`email`) REFERENCES `usuario` (`email`);
 
 --
--- Restrições para tabelas `eventos`
+-- Restrições para tabelas `evento`
 --
-ALTER TABLE `eventos`
-  ADD CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`ano`,`mes`) REFERENCES `calendario` (`ano`, `mes`);
+ALTER TABLE `evento`
+  ADD CONSTRAINT `evento_ibfk_1` FOREIGN KEY (`email`) REFERENCES `usuario` (`email`);
 
 --
 -- Restrições para tabelas `item_lista`

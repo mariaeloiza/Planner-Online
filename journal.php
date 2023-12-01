@@ -8,16 +8,12 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
  
-
-    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!--<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- Custom styles for this template -->
     <link href="css/css_journal.css" rel="stylesheet" />
 </head>
 <body>
@@ -32,7 +28,8 @@ function conectarBanco() {
   $senha = "";
   $banco = "planneronline";
 
-  $conexao = new mysqli($servidor, $usuario, $senha, $banco);
+  
+  $conexao = new mysqli("localhost", "root", "", "planneronline");
 
   if ($conexao->connect_error) {
       die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
@@ -81,18 +78,10 @@ function autenticarUsuario($email, $senha) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recupere o email e a senha do formulário
-    // $email = $_POST["email"];
-    // $senha = $_POST["senha"];
-
-
-    // Verifique a autenticação (isso pode variar dependendo do seu sistema)
-    // Se o usuário estiver autenticado com sucesso, você pode pegar o email
+    
     $emailAutenticado = $_SESSION['usuario_email'];
 
-    // $emailAutenticado = $_POST["email"];
-
-    // Agora, você pode juntar o email com outros dados e colocá-los em um novo div
+    
     $data = $_POST["data"];
     $descricao = $_POST["descricao"];
     $conteudo = "Email: $emailAutenticado<br>Data: $data<br>Texto: $descricao";
@@ -110,21 +99,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->close();
 
   } else {
-      // Trate o erro na preparação da consulta, se necessário
+      
   }
-
     $conexao->close();
-    // $stmt = $mysqli->prepare($sql);
-    // $stmt->bind_param("sss", $data, $descricao, $emailAutenticado);
 
-    // Exiba o conteúdo em um div
-//     echo "<div id='conteudo' style='background-color: white;
-//                                     color: #333;
-//                                     padding: 10px;
-//                                     border: 2px solid #ccc;
-//                                     border-radius: 10px'>$data, $descricao</div>";
+    // echo "<div id='conteudo' style='background-color: white;
+    //                                 color: #333;
+    //                                 padding: 10px;
+    //                                 border: 2px solid #ccc;
+    //                                 border-radius: 10px'>$data, $descricao</div>";
  } else {
-    // echo "Autenticação falhou. Por favor, tente novamente.";
+    
 }
 
 ?>
@@ -198,7 +183,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <br>
 
      <?php 
-      //  Exiba o conteúdo em um div 
         echo "<div id='conteudo' style='background-color: white;
                                         color: #333;
                                         padding: 10px;
