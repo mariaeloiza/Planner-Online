@@ -81,7 +81,7 @@
 
                 <div class="form-outline mb-4">
                   <input type="password" class="form-control form-control-lg" name="senha" minlength="4" maxlength="8" />
-                  <label class="form-label">Senha (de 4 a 8 caracteres)</label>
+                  <label class="form-label">Senha</label>
                 </div>
 
                 <button class="btn btn-outline-info" type="submit" value="Submit">Cadastrar</button>
